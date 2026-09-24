@@ -15,7 +15,9 @@ function extraiParagrafos(texto) {
 }
 
 function limpaPalavras(palavra) {
-    return palavra.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"“”]/g, '');
+    return palavra
+        .replace(/[^\p{L}\p{N}'’-]/gu, '')
+        .replace(/^['’-]+|['’-]+$/g, '');
 }
 
 function verificaPalavrasDuplicadas(texto) {
