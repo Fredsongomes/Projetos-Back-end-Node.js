@@ -1,0 +1,15 @@
+{
+  "name": "01-node.js-biblioteca",
+  "version": "0.0.1",
+  "description": "CLI que identifica palavras duplicadas em cada parágrafo de um texto",
+  "main": "src/cli.js",
+  "type": "module",
+  "scripts": {
+    "cli": "node src/cli.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^6.0.0",
+    "commander": "^15.0.0"
+  }
+}

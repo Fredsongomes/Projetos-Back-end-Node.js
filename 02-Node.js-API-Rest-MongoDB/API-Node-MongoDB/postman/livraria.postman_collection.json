@@ -1,0 +1,172 @@
+{
+  "info": {
+    "name": "API Livraria - Revisão",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "autorId", "value": "" },
+    { "key": "livroId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "01 - Cadastrar autor",
+      "request": { "method": "POST", "url": "{{baseUrl}}/autores", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"nome\": \"Autor Teste QA\", \"nacionalidade\": \"brasileira\"}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('201 criado', () => pm.response.to.have.status(201));",
+        "pm.collectionVariables.set('autorId', pm.response.json()._id);"
+      ] } }]
+    },
+    {
+      "name": "02 - Cadastrar livro",
+      "request": { "method": "POST", "url": "{{baseUrl}}/livros", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"titulo\": \"Livro Teste QA (C++\", \"autor\": \"{{autorId}}\", \"editora\": \"Alura\", \"numeroPaginas\": 100}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('201 criado', () => pm.response.to.have.status(201));",
+        "pm.collectionVariables.set('livroId', pm.response.json()._id);"
+      ] } }]
+    },
+    {
+      "name": "03 - Atualizar autor (antes enviava resposta duplicada)",
+      "request": { "method": "PUT", "url": "{{baseUrl}}/autores/{{autorId}}", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"nome\": \"Autor Teste QA Editado\"}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 atualizado', () => pm.response.to.have.status(200));"
+      ] } }]
+    },
+    {
+      "name": "04 - Buscar autor atualizado",
+      "request": { "method": "GET", "url": "{{baseUrl}}/autores/{{autorId}}" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "pm.test('nome atualizado', () => pm.expect(pm.response.json().nome).to.eql('Autor Teste QA Editado'));"
+      ] } }]
+    },
+    {
+      "name": "05 - runValidators: autor com nome em branco",
+      "request": { "method": "PUT", "url": "{{baseUrl}}/autores/{{autorId}}", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"nome\": \"\"}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 validação', () => pm.response.to.have.status(400));"
+      ] } }]
+    },
+    {
+      "name": "06 - runValidators: editora fora do enum",
+      "request": { "method": "PUT", "url": "{{baseUrl}}/livros/{{livroId}}", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"editora\": \"Editora Inexistente\"}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 validação', () => pm.response.to.have.status(400));"
+      ] } }]
+    },
+    {
+      "name": "07 - runValidators: numeroPaginas fora do limite",
+      "request": { "method": "PUT", "url": "{{baseUrl}}/livros/{{livroId}}", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"numeroPaginas\": 5}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 validação', () => pm.response.to.have.status(400));"
+      ] } }]
+    },
+    {
+      "name": "08 - Atualizar livro com dados válidos",
+      "request": { "method": "PUT", "url": "{{baseUrl}}/livros/{{livroId}}", "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"numeroPaginas\": 250}" } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 atualizado', () => pm.response.to.have.status(200));"
+      ] } }]
+    },
+    {
+      "name": "09 - Buscar livro por id (valores inválidos não foram gravados)",
+      "request": { "method": "GET", "url": "{{baseUrl}}/livros/{{livroId}}" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "const l = pm.response.json();",
+        "pm.test('editora continua Alura', () => pm.expect(l.editora).to.eql('Alura'));",
+        "pm.test('numeroPaginas = 250', () => pm.expect(l.numeroPaginas).to.eql(250));",
+        "pm.test('autor populado', () => pm.expect(l.autor.nome).to.eql('Autor Teste QA Editado'));"
+      ] } }]
+    },
+    {
+      "name": "10 - Ordenação sem direção (antes 500)",
+      "request": { "method": "GET", "url": "{{baseUrl}}/livros?ordenacao=titulo&limite=3" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "pm.test('array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+      ] } }]
+    },
+    {
+      "name": "11 - Ordenação com direção inválida",
+      "request": { "method": "GET", "url": "{{baseUrl}}/livros?ordenacao=titulo:abc" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 requisição incorreta', () => pm.response.to.have.status(400));"
+      ] } }]
+    },
+    {
+      "name": "12 - Ordenação decrescente",
+      "request": { "method": "GET", "url": "{{baseUrl}}/autores?ordenacao=nome:-1&limite=2&pagina=1" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "pm.test('no máximo 2 itens', () => pm.expect(pm.response.json().length).to.be.at.most(2));"
+      ] } }]
+    },
+    {
+      "name": "13 - Busca por título com caracteres especiais (antes 500)",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/livros/busca?titulo=qa%20(c%2B%2B", "host": ["{{baseUrl}}"], "path": ["livros", "busca"], "query": [{ "key": "titulo", "value": "qa%20(c%2B%2B" }] } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "pm.test('encontra o livro de teste', () => pm.expect(pm.response.json().map(l => l._id)).to.include(pm.collectionVariables.get('livroId')));"
+      ] } }]
+    },
+    {
+      "name": "14 - Busca com regex tratada como texto literal",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/livros/busca?titulo=.*", "host": ["{{baseUrl}}"], "path": ["livros", "busca"], "query": [{ "key": "titulo", "value": ".*" }] } },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "pm.test('não retorna tudo (.* é literal)', () => pm.expect(pm.response.json().map(l => l._id)).to.not.include(pm.collectionVariables.get('livroId')));"
+      ] } }]
+    },
+    {
+      "name": "15 - Busca por nome do autor e editora",
+      "request": { "method": "GET", "url": "{{baseUrl}}/livros/busca?nomeAutor=Autor Teste QA Editado&editora=Alura&minPaginas=200&maxPaginas=300" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200', () => pm.response.to.have.status(200));",
+        "pm.test('encontra o livro de teste', () => pm.expect(pm.response.json().map(l => l._id)).to.include(pm.collectionVariables.get('livroId')));"
+      ] } }]
+    },
+    {
+      "name": "16 - Id em formato inválido",
+      "request": { "method": "GET", "url": "{{baseUrl}}/livros/id-invalido" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400', () => pm.response.to.have.status(400));"
+      ] } }]
+    },
+    {
+      "name": "17 - Rota inexistente",
+      "request": { "method": "GET", "url": "{{baseUrl}}/rota-inexistente" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('404', () => pm.response.to.have.status(404));"
+      ] } }]
+    },
+    {
+      "name": "18 - Excluir livro",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/livros/{{livroId}}" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 removido', () => pm.response.to.have.status(200));"
+      ] } }]
+    },
+    {
+      "name": "19 - Excluir autor",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/autores/{{autorId}}" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 removido', () => pm.response.to.have.status(200));"
+      ] } }]
+    },
+    {
+      "name": "20 - Livro excluído não é encontrado",
+      "request": { "method": "GET", "url": "{{baseUrl}}/livros/{{livroId}}" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('404', () => pm.response.to.have.status(404));"
+      ] } }]
+    }
+  ]
+}
