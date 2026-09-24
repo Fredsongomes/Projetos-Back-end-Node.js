@@ -1,9 +1,12 @@
 export function contaPalavras(texto) {
-    const paragrafos = extraiParagrafos(texto)
-    const contagem = paragrafos.flatMap((paragrafo) => {
+    const paragrafos = extraiParagrafos(texto);
+    const contagem = paragrafos.flatMap((paragrafo, indice) => {
         if (!paragrafo.trim()) return [];
-        return verificaPalavrasDuplicadas(paragrafo);
-    })
+        return {
+            numero: indice + 1,
+            palavras: verificaPalavrasDuplicadas(paragrafo)
+        };
+    });
     return contagem;
 }
 
@@ -21,8 +24,8 @@ function verificaPalavrasDuplicadas(texto) {
     listaPalavras.forEach(palavra => {
         const palavraLimpa = limpaPalavras(palavra);
         if (palavraLimpa.length >= 3) {
-            resultado[palavraLimpa] = (resultado[palavraLimpa] || 0) + 1
+            resultado[palavraLimpa] = (resultado[palavraLimpa] || 0) + 1;
         }
-    })
-    return resultado
+    });
+    return resultado;
 }

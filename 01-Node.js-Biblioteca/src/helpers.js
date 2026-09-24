@@ -1,13 +1,14 @@
-function filtraOcorrencias(paragrafo) {
-    return Object.keys(paragrafo).filter(chave => paragrafo[chave] > 1)
+function filtraOcorrencias(palavras) {
+    return Object.keys(palavras).filter(chave => palavras[chave] > 1);
 }
 
-function montaSaidaArquivo(listaPalavras) {
+function montaSaidaArquivo(listaParagrafos) {
     let textoFinal = '';
-    listaPalavras.forEach((paragrafo, indice) => {
-        const duplicadas = filtraOcorrencias(paragrafo).join(', ');
-        textoFinal += `palavras duplicadas no parágrafo ${indice + 1}: ${duplicadas}\n`
-    })
+    listaParagrafos.forEach(({ numero, palavras }) => {
+        const duplicadas = filtraOcorrencias(palavras);
+        if (duplicadas.length === 0) return;
+        textoFinal += `palavras duplicadas no parágrafo ${numero}: ${duplicadas.join(', ')}\n`;
+    });
 
     return textoFinal;
 }
