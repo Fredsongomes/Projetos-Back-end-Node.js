@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Node.js-18.18%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
   <img src="https://img.shields.io/badge/Express-4.x-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express">
   <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
   <img src="https://img.shields.io/badge/licença-ISC-blue?style=for-the-badge" alt="Licença ISC">
@@ -59,7 +59,7 @@ Controlar um acervo de livros em planilhas ou anotações soltas leva a dados du
 
 ### Pré-requisitos
 
-- [Node.js](https://nodejs.org/) **18 ou superior**
+- [Node.js](https://nodejs.org/) **18.18 ou superior**
 - **npm** (já vem com o Node.js)
 - [Git](https://git-scm.com/)
 - Um banco **MongoDB**: um cluster gratuito no [MongoDB Atlas](https://www.mongodb.com/atlas) ou o MongoDB instalado na sua máquina
@@ -74,8 +74,8 @@ npm -v
 ### Clonagem do repositório
 
 ```bash
-git clone https://github.com/<seu-usuario>/<seu-repositorio>.git
-cd <seu-repositorio>
+git clone https://github.com/Fredsongomes/Projetos-Back-end-Node.js.git
+cd Projetos-Back-end-Node.js/02-Node.js-API-Rest-MongoDB/API-Node-MongoDB
 ```
 
 ### Instalação das dependências

@@ -1,33 +1,33 @@
-import RequisicaoIncorreta from "../erros/RequisicaoIncorreta.js"
+import RequisicaoIncorreta from "../erros/RequisicaoIncorreta.js";
 
 async function paginar(req, res, next) {
 
-    try {
-        let { limite = 5, pagina = 1, ordenacao = "_id:-1" } = req.query;
+  try {
+    let { limite = 5, pagina = 1, ordenacao = "_id:-1" } = req.query;
 
-        // sem direção informada, ordena de forma crescente
-        let [campoOrdenacao, ordem = 1] = ordenacao.split(":");
+    // sem direção informada, ordena de forma crescente
+    let [campoOrdenacao, ordem = 1] = ordenacao.split(":");
 
-        limite = parseInt(limite);
-        pagina = parseInt(pagina);
-        ordem = parseInt(ordem);
+    limite = parseInt(limite);
+    pagina = parseInt(pagina);
+    ordem = parseInt(ordem);
 
-        const resultado = req.resultado;
+    const resultado = req.resultado;
 
-        if (limite > 0 && pagina > 0 && (ordem === 1 || ordem === -1)) {
-            const resultadoPaginado = await resultado.find()
-                .sort({ [campoOrdenacao]: ordem })
-                .skip((pagina - 1) * limite)
-                .limit(limite)
-                .exec();
+    if (limite > 0 && pagina > 0 && (ordem === 1 || ordem === -1)) {
+      const resultadoPaginado = await resultado.find()
+        .sort({ [campoOrdenacao]: ordem })
+        .skip((pagina - 1) * limite)
+        .limit(limite)
+        .exec();
 
-            res.status(200).json(resultadoPaginado);
-        } else {
-            next(new RequisicaoIncorreta());
-        }
-    } catch (erro) {
-        next(erro);
+      res.status(200).json(resultadoPaginado);
+    } else {
+      next(new RequisicaoIncorreta());
     }
+  } catch (erro) {
+    next(erro);
+  }
 }
 
 export default paginar;

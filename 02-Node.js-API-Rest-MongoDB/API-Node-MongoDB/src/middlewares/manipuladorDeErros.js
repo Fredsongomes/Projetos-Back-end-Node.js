@@ -11,12 +11,16 @@ function manipuladorDeErros(erro, req, res, next) {
   } else if (erro instanceof mongoose.Error.ValidationError) {
     new ErroValidacao(erro).enviarResposta(res);
 
-  } else if(erro instanceof ErroBase) {
+  } else if (erro instanceof ErroBase) {
     erro.enviarResposta(res);
+
+  } else if (erro.type === "entity.parse.failed") {
+    // corpo da requisição com JSON malformado
+    new RequisicaoIncorreta().enviarResposta(res);
 
   } else {
     new ErroBase().enviarResposta(res);
   }
 }
 
-export default manipuladorDeErros
+export default manipuladorDeErros;

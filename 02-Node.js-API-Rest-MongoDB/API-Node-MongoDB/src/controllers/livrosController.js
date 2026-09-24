@@ -24,7 +24,7 @@ class LivroController {
         .exec();
 
       if (livroResultados !== null) {
-        res.status(200).send(livroResultados)
+        res.status(200).send(livroResultados);
 
       } else {
         next(new NaoEncontrado("Id do livro não localizado"));
@@ -34,9 +34,10 @@ class LivroController {
       next(erro);
     }
   };
+
   static cadastrarLivro = async (req, res, next) => {
     try {
-      let livro = new livros(req.body);
+      const livro = new livros(req.body);
 
       const livroResultado = await livro.save();
 
@@ -55,7 +56,7 @@ class LivroController {
       if (livroResultado !== null) {
         res.status(200).send({ message: "Livro atualizado com sucesso" });
       } else {
-        next(new NaoEncontrado("Id do livro não localizado"))
+        next(new NaoEncontrado("Id do livro não localizado"));
       }
 
     } catch (erro) {
@@ -72,7 +73,7 @@ class LivroController {
       if (livroResultado !== null) {
         res.status(200).send({ message: "Livro removido com sucesso" });
       } else {
-        next(new NaoEncontrado("Id do livro não localizado"))
+        next(new NaoEncontrado("Id do livro não localizado"));
       }
 
     } catch (erro) {
@@ -133,4 +134,5 @@ async function processaBusca(parametros) {
 function escaparRegex(texto) {
   return String(texto).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-export default LivroController
+
+export default LivroController;

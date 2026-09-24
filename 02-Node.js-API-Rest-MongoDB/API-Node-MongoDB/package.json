@@ -1,7 +1,7 @@
 {
-  "name": "alura-node",
+  "name": "api-livraria",
   "version": "1.0.0",
-  "description": "",
+  "description": "API REST com Express e MongoDB para gerenciar livros e autores de uma livraria",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -9,13 +9,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Fredson Gomes",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
     "eslint": "^9.38.0",
     "globals": "^16.4.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^3.1.14"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
