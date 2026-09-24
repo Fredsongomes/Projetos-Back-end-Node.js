@@ -7,17 +7,17 @@ CLI em Node.js que lê um arquivo de texto e identifica as **palavras duplicadas
 O programa recebe pelo terminal o caminho de um texto e o caminho de uma pasta de destino. Em seguida ele:
 
 1. Lê o arquivo de texto;
-2. Divide o conteúdo em parágrafos (quebras de linha), ignorando linhas vazias;
+2. Divide o conteúdo em parágrafos (quebras de linha), ignorando linhas vazias. Cada parágrafo é numerado pela sua linha no arquivo;
 3. Remove pontuação das palavras e desconsidera palavras com menos de 3 letras;
 4. Conta quantas vezes cada palavra aparece em cada parágrafo;
-5. Gera o arquivo `resultado.txt` na pasta de destino, listando as palavras repetidas de cada parágrafo.
+5. Gera o arquivo `resultado.txt` na pasta de destino, listando apenas os parágrafos que têm palavras repetidas.
 
-Exemplo de saída:
+Exemplo de saída para `arquivos/texto-web.txt`:
 
 ```
-palavras duplicadas no parágrafo 3: uma
-palavras duplicadas no parágrafo 7: dispositivos, web, seu, conectado
-palavras duplicadas no parágrafo 8: cliente, uma, para
+palavras duplicadas no parágrafo 5: uma
+palavras duplicadas no parágrafo 12: dispositivos, web, seu, conectado
+palavras duplicadas no parágrafo 14: cliente, uma, para
 ```
 
 Erros como arquivo ou pasta inexistente são tratados e exibidos com uma mensagem amigável.
@@ -42,6 +42,8 @@ Erros como arquivo ou pasta inexistente são tratados e exibidos com uma mensage
 ```
 
 ## Como executar
+
+Pré-requisito: Node.js **22.12 ou superior**, a versão mínima exigida pelo Commander e pelo Chalk.
 
 Instale as dependências:
 

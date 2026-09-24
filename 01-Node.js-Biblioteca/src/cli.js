@@ -50,5 +50,4 @@ async function criaESalvaArquivo(listaPalavras, endereco) {
     const arquivoNovo = path.join(endereco, 'resultado.txt');
     const textoPalavras = montaSaidaArquivo(listaPalavras);
     await fs.promises.writeFile(arquivoNovo, textoPalavras);
-    console.log('arquivo criado');
 }
